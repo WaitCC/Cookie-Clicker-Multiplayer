@@ -13,12 +13,13 @@ function parseAscii(data) {
 const server = http.createServer((req,res) => {
     if (req.method=="GET") {
         data = parse(req.url.substring(2));
-        if (data.method="post") {
+        console.log(data);
+        if (data.apiAction=="post") {
             res.writeHead(200);
             res.end("ok");
             leaderboard[data.name]=data;
-            console.log(leaderboard);
-        } else if (data.method="get") {
+            console.log("leaderboard: "+JSON.stringify(leaderboard));
+        } else if (data.apiAction=="get") {
             res.writeHead(200);
             res.end(JSON.stringify(leaderboard));
             console.log("sent leaderboard");

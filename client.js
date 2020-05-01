@@ -1,16 +1,15 @@
 // ==UserScript==
-// @name         New Userscript
+// @name         Cookie Clicker Multiplayer
 // @namespace    http://tampermonkey.net/
 // @version      0.1
-// @description  try to take over the world!
-// @author       You
+// @description  Adds multiplayer functionality to Cookie Clicker
+// @author       Louis Rust
 // @match        https://orteil.dashnet.org/cookieclicker/
 // @grant        none
 // ==/UserScript==
 
 (function() {
     'use strict';
-
 
     var data;
     var url;
@@ -22,7 +21,7 @@
     }, 1000);
     url = "http://secretsociety.store:5750";
     var uploadData = setInterval(function() {
-        data = "method=post&name="+Game.bakeryName+"&cookies="+Game.cookies+"&cps="+Game.cookiesPs;
+        data = "apiAction=post&name="+Game.bakeryName+"&cookies="+Game.cookies+"&cps="+Game.cookiesPs;
         var xhr = new XMLHttpRequest();
         xhr.open("GET",url+"?"+data,true);
         xhr.send();
