@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Cookie Clicker Multiplayer
 // @namespace    http://tampermonkey.net/
-// @version      0.1
+// @version      0.2
 // @description  Adds multiplayer functionality to Cookie Clicker
 // @author       Louis Rust
 // @match        https://orteil.dashnet.org/cookieclicker/
