@@ -17,7 +17,7 @@
 
     function init() {
         var style = document.createElement("style");
-        style.innerHTML = "#leaderboardTable {margin: 10px;min-height:50px;text-align: left;} #lbLabel {text-align: left;padding-right: 100px;}";
+        style.innerHTML = "#leaderboardTable {margin: 10px;min-height:50px;text-align: left;} #lbLabel {text-align: left;padding-right: 100px;} #lbSpacer {height:10px;}";
         document.head.appendChild(style);
         var lbTable = document.createElement("table");
         var titleRow = document.createElement("tr");
@@ -25,8 +25,8 @@
         lbTable.setAttribute("id","leaderboardTable");
         document.getElementById("buildingsMaster").appendChild(lbTable);
         lbTable.appendChild(titleRow);
+        addLeaderboardStats();
     }
-
     function addLeaderboardStats() {
         var refreshLeaderboard = setInterval(function() {
             var table = document.getElementById("leaderboardTable");
@@ -56,13 +56,17 @@
                     table.appendChild(row);
                 }
             }
+            if (!document.getElementById("lbSpacer")) {
+                var spacer = document.createElement("div");
+                spacer.setAttribute("id","lbSpacer");
+                table.appendChild(spacer);
+            }
         },3000);
     }
     var checkReady = setInterval(function() {
         if (typeof Game.ready !== 'undefined' && Game.ready) {
             Game.Notify("Cookie Clicker Multiplayer","Mod loaded!",null,true);
             init();
-            addLeaderboardStats();
             clearInterval(checkReady);
         }
     }, 1000);
