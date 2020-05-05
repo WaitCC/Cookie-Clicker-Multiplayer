@@ -3,30 +3,21 @@ var http = require("http");
 const { parse } = require("querystring");
 
 const port = 5750;
-var leaderboard = {};
-
-function parse64(data) {
-        return Buffer.from(data).toString("base64");
-}
-function parseAscii(data) {
-    return Buffer.from(data,"base64").toString("ascii");
-}
-
+var leaderboard = {}
+inactiveTimeout = 24*3600 // 1 day
 
 const server = http.createServer((req,res) => {
     res.setHeader("Access-Control-Allow-Origin","*");
     if (req.method=="GET") {
         data = parse(req.url.substring(2));
-        console.log(data);
         if (data.apiAction=="post") {
             res.writeHead(200);
             res.end("ok");
+            data.lastUpdate = Math.floor(Date.now() / 1000);
             leaderboard[data.name]=data;
-            console.log("leaderboard: "+JSON.stringify(leaderboard));
         } else if (data.apiAction=="get") {
             res.writeHead(200);
             res.end(JSON.stringify(leaderboard));
-            console.log("sent leaderboard");
         } else {
             res.writeHead(400);
             res.end("invalid method");
@@ -36,3 +27,14 @@ const server = http.createServer((req,res) => {
         res.end("bad request");
     }
 }).listen(port);
+console.log("Started on port "+port);
+
+setInterval(function() {
+    currentTime = Math.floor(Date.now() / 1000);
+    for (x in leaderboard) {
+        if (leaderboard[x].lastUpdate+inactiveTimeout<currentTime) {
+            console.log("Removed "+x+" from leaderboard for inactivity");
+            delete leaderboard[x];
+        }
+    }
+},inactiveTimeout*1000);

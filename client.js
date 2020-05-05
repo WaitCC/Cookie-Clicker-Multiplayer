@@ -11,7 +11,6 @@
 (function() {
     'use strict';
 
-    var data;
     var toggle = 0;
     var url = "http://secretsociety.store:5750";
 
@@ -33,15 +32,14 @@
             var getLeaderboardData = new XMLHttpRequest();
             getLeaderboardData.open("GET",url+"?apiAction=get",false);
             getLeaderboardData.send(null);
-            data = "";
             var leaderboardData = JSON.parse(getLeaderboardData.responseText);
             for (var x in leaderboardData) {
-                data += x;
                 var identifier = "user-"+leaderboardData[x].name.replace(" ","-");
                 if (document.getElementById(identifier)) {
                     var userData = "<td id='leaderboardName'>"+leaderboardData[x].name+"</td><td id='leaderboardCPS'>"+Beautify(Math.floor(leaderboardData[x].cps))+"</td><td id='leaderboardCookies'>"+Beautify(Math.floor(leaderboardData[x].cookies))+"</td>";
                     document.getElementById(identifier).innerHTML = userData;
                 } else {
+                    if (document.getElementById("lbSpacer")) {document.getElementById("lbSpacer").parentNode.removeChild(document.getElementById("lbSpacer"));}
                     var row = document.createElement("tr");
                     row.setAttribute("id","user-"+leaderboardData[x].name.replace(" ","-"));
                     var nameCol = document.createElement("td");
@@ -54,6 +52,9 @@
                     row.appendChild(cpsCol);
                     row.appendChild(cookiesCol);
                     table.appendChild(row);
+                    var spacer = document.createElement("div");
+                    spacer.setAttribute("id","lbSpacer");
+                    table.appendChild(spacer);
                 }
             }
             if (!document.getElementById("lbSpacer")) {
@@ -71,7 +72,7 @@
         }
     }, 1000);
     var uploadData = setInterval(function() {
-        data = "apiAction=post&name="+Game.bakeryName+"&cookies="+Game.cookies+"&cps="+Game.cookiesPs;
+        var data = "apiAction=post&name="+Game.bakeryName+"&cookies="+Game.cookies+"&cps="+Game.cookiesPs;
         var xhr = new XMLHttpRequest();
         xhr.open("GET",url+"?"+data,true);
         xhr.send();
